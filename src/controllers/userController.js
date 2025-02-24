@@ -1,6 +1,5 @@
-const { addUser,getUserByEmail } = require('../models/userModel');
+const { getDB } = require('../config/db');
 const bcrypt = require('bcrypt');
-const auth = require("../middleware/auth");
 const jwt = require('jsonwebtoken');
 
 async function register(req, res) {
@@ -61,6 +60,18 @@ async function myProfile(req,res){
     } catch (error) {
         res.status(500).send({ message: 'Error fetching user profile', error: error.message });
     }
+}
+
+async function addUser(userData) {
+    const collection = getDB().collection('users');
+    const result = await collection.insertOne(userData);
+    return result.insertedId;
+}
+
+async function getUserByEmail(email) {
+    const collection = getDB().collection('users');
+    const user = await collection.findOne({ email });
+    return user;  
 }
 
 module.exports = { register, login, myProfile };
