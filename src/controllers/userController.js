@@ -34,13 +34,33 @@ async function login(req, res) {
             return res.status(400).send({ message: 'Invalid password' });
         }
 
-        const token = jwt.sign({_id: user._id }, 'myjwttoken', { expiresIn: '1h' })
+        const token = jwt.sign(  {
+            _id: user._id,
+            fullName: user.fullName,
+            userName: user.userName,
+            email: user.email,        
+            password: user.password   
+        }, 'myjwttoken', { expiresIn: '1h' })
 
         res.status(200).send({ message: 'Login successful', token });
     } catch (error) {
-        console.error("Login error:", error);
         res.status(500).send({ message: 'Error logging in', error: error.message });
     }
 }
 
-module.exports = { register, login };
+async function myProfile(req,res){
+    try {
+        const user = req.user;
+        res.status(200).send({
+            user: {
+                fullName: user.fullName, 
+                userName: user.userName,
+                email: user.email
+            }
+        });
+    } catch (error) {
+        res.status(500).send({ message: 'Error fetching user profile', error: error.message });
+    }
+}
+
+module.exports = { register, login, myProfile };
