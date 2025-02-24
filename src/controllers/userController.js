@@ -1,5 +1,7 @@
 const { addUser,getUserByEmail } = require('../models/userModel');
 const bcrypt = require('bcrypt');
+const auth = require("../middleware/auth");
+const jwt = require('jsonwebtoken');
 
 async function register(req, res) {
     try {
@@ -32,7 +34,9 @@ async function login(req, res) {
             return res.status(400).send({ message: 'Invalid password' });
         }
 
-        res.status(200).send({ message: 'Login successful' });
+        const token = jwt.sign({_id: user._id }, 'myjwttoken', { expiresIn: '1h' })
+
+        res.status(200).send({ message: 'Login successful', token });
     } catch (error) {
         console.error("Login error:", error);
         res.status(500).send({ message: 'Error logging in', error: error.message });
