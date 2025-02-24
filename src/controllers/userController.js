@@ -1,0 +1,42 @@
+const { addUser,getUserByEmail } = require('../models/userModel');
+const bcrypt = require('bcrypt');
+
+async function register(req, res) {
+    try {
+        const userData = req.body;
+        const hashedPassword = await bcrypt.hash(userData.password, 10);
+        userData.password = hashedPassword;
+        const userId = await addUser(userData);
+        res.status(201).send({ message: 'User added successfully', userId: userId });
+    } catch (error) {
+        res.status(500).send({ message: 'Error adding user', error: error.message });
+    }
+}
+
+async function login(req, res) {
+    try {
+        const { email, password } = req.body;
+        const user = await getUserByEmail(email);
+
+        if (!user) {
+            return res.status(404).send({ message: 'User not found' });
+        }
+
+        if (!user.password) {
+            return res.status(500).send({ message: 'Password is missing in the database' });
+        }
+
+        const isMatch = await bcrypt.compare(password.trim(), user.password.trim());
+
+        if (!isMatch) {
+            return res.status(400).send({ message: 'Invalid password' });
+        }
+
+        res.status(200).send({ message: 'Login successful' });
+    } catch (error) {
+        console.error("Login error:", error);
+        res.status(500).send({ message: 'Error logging in', error: error.message });
+    }
+}
+
+module.exports = { register, login };
