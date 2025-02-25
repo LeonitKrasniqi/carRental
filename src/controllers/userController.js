@@ -5,10 +5,19 @@ const jwt = require('jsonwebtoken');
 async function register(req, res) {
     try {
         const userData = req.body;
-        const hashedPassword = await bcrypt.hash(userData.password, 10);
-        userData.password = hashedPassword;
-        const userId = await addUser(userData);
-        res.status(201).send({ message: 'User added successfully', userId: userId });
+        const collection = getDB().collection('users');
+
+        const existingUser = await collection.findOne({ email: userData.email });
+        if (existingUser) {
+            return res.status(400).send({ message: 'Email already registered' });
+        }
+        userData.password = await bcrypt.hash(userData.password.trim(), 10);
+        await collection.insertOne(userData);
+        const { password, ...userResponse } = userData;
+        res.status(201).send({ 
+            message: 'User added successfully', 
+            user: userResponse 
+        });
     } catch (error) {
         res.status(500).send({ message: 'Error adding user', error: error.message });
     }
@@ -17,7 +26,9 @@ async function register(req, res) {
 async function login(req, res) {
     try {
         const { email, password } = req.body;
-        const user = await getUserByEmail(email);
+        const collection = getDB().collection('users');
+
+        const user = await collection.findOne({ email });
 
         if (!user) {
             return res.status(404).send({ message: 'User not found' });
@@ -33,13 +44,14 @@ async function login(req, res) {
             return res.status(400).send({ message: 'Invalid password' });
         }
 
-        const token = jwt.sign(  {
+        const payload = {
             _id: user._id,
             fullName: user.fullName,
             userName: user.userName,
-            email: user.email,        
-            password: user.password   
-        }, 'myjwttoken', { expiresIn: '1h' })
+            email: user.email
+        };
+        const jwtSecret = "myjwttoken";
+        const token = jwt.sign(payload, jwtSecret, { expiresIn: '1h' });
 
         res.status(200).send({ message: 'Login successful', token });
     } catch (error) {
@@ -60,18 +72,6 @@ async function myProfile(req,res){
     } catch (error) {
         res.status(500).send({ message: 'Error fetching user profile', error: error.message });
     }
-}
-
-async function addUser(userData) {
-    const collection = getDB().collection('users');
-    const result = await collection.insertOne(userData);
-    return result.insertedId;
-}
-
-async function getUserByEmail(email) {
-    const collection = getDB().collection('users');
-    const user = await collection.findOne({ email });
-    return user;  
 }
 
 module.exports = { register, login, myProfile };

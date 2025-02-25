@@ -6,16 +6,16 @@ async function addCar(req, res) {
         const collection = getDB().collection('cars');
         const result = await collection.insertOne(carData);
 
-        res.status(201).send({ message: 'Car added successfully', carId: result.insertedId });
+        carData._id = result.insertedId;
+
+        res.status(201).send({ message: 'Car added successfully', car: carData });
     } catch (error) {
         res.status(500).send({ message: 'Error adding car', error: error.message });
     }
 }
-
 async function rentalCars(req, res) {
     try {
         const { year, color, steering_type, number_of_seats } = req.query;
-
         let filter = {};
 
         if (year) filter.year = parseInt(year);
@@ -23,20 +23,13 @@ async function rentalCars(req, res) {
         if (steering_type) filter.steering_type = steering_type;
         if (number_of_seats) filter.number_of_seats = parseInt(number_of_seats);
 
-        const cars = await getCars(filter);
-        
-        const sortedCars = cars.sort((a, b) => a.price_per_day - b.price_per_day);
+        const collection = getDB().collection('cars');
+        const cars = await collection.find(filter).sort({ price_per_day: 1 }).toArray(); 
 
-        res.status(200).send(sortedCars);
+        res.status(200).send(cars);
     } catch (error) {
         res.status(500).send({ message: 'Error fetching cars', error: error.message });
     }
 }
 
-async function getCars(filter) {
-    const collection = getDB().collection('cars');
-    const cars = await collection.find(filter).toArray();
-    return cars;
-}
-
-module.exports = {rentalCars, getCars,addCar}
+module.exports = {rentalCars,addCar}
