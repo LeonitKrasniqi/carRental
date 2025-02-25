@@ -176,5 +176,3 @@ PORT=3000
     The cars will be returned sorted by price in ascending order.
 
     ```
-
----
