@@ -1,14 +1,13 @@
 const express = require('express');
 const {connectDB} = require('./config/db')
 const userRouter = require('./routers/userRouter')
+const carRouter = require('./routers/carRouter')
 
 const app = express();
 app.use(express.json())
 
-app.get('/', (req, res) => {
-    res.send('Hello, Express!');
-});
 app.use('/api', userRouter);
+app.use('/api', carRouter)
 
 connectDB().then(() => {
     const PORT = 3000;
