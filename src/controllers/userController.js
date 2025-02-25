@@ -1,3 +1,4 @@
+require('dotenv').config();
 const { getDB } = require('../config/db');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
@@ -50,8 +51,7 @@ async function login(req, res) {
             userName: user.userName,
             email: user.email
         };
-        const jwtSecret = "myjwttoken";
-        const token = jwt.sign(payload, jwtSecret, { expiresIn: '1h' });
+        const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' });
 
         res.status(200).send({ message: 'Login successful', token });
     } catch (error) {

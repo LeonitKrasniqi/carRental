@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const {connectDB} = require('./config/db')
 const userRouter = require('./routers/userRouter')
@@ -10,7 +11,7 @@ app.use('/api', userRouter);
 app.use('/api', carRouter)
 
 connectDB().then(() => {
-    const PORT = 3000;
+    const PORT = process.env.PORT;
     app.listen(PORT, () => {
         console.log(`Server is running on http://localhost:${PORT}`);
     });
