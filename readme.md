@@ -140,17 +140,17 @@ Make sure you have the following installed:
     GET http://localhost:3000/api/rental-cars
     ```
 
-    To filter cars by color (e.g., blue):
+    To filter cars by color (e.g. blue):
     ```
     GET http://localhost:3000/api/rental-cars?color=blue
     ```
 
-    To filter cars by year (e.g., 2022):
+    To filter cars by year (e.g. 2022):
     ```
     GET http://localhost:3000/api/rental-cars?year=2022
     ```
 
-    To filter cars by steering type (e.g., left) and number of seats (e.g., 5):
+    To filter cars by steering type (e.g. automatic) and number of seats (e.g. 5):
     ```
     GET http://localhost:3000/api/rental-cars?steering_type=automatic&number_of_seats=5
     ```
