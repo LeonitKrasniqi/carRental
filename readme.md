@@ -26,6 +26,7 @@ DB_URI=mongodb://localhost:27017
 DB_NAME=carRental
 JWT_SECRET=myjwttoken
 PORT=3000
+```
 
 ## Running the Application
 
