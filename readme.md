@@ -31,7 +31,7 @@ Make sure you have the following installed:
 ## HTTP Methods to Test
 
 ### 1. **POST Request** - Register a new user
-- **Endpoint**: `/register`
+- **Endpoint**: `/api/register`
 - **Method**: `POST`
 - **Description**: This will register a new user.
 - **Request Body** (example JSON):
@@ -46,7 +46,7 @@ Make sure you have the following installed:
 
     Example command:
     ```
-    POST http://localhost:3000/register
+    POST http://localhost:3000/api/register
     Content-Type: application/json
 
     {
@@ -58,7 +58,7 @@ Make sure you have the following installed:
     ```
 
 ### 2. **POST Request** - Login and receive JWT token
-- **Endpoint**: `/login`
+- **Endpoint**: `/api/login`
 - **Method**: `POST`
 - **Description**: This will log the user in and return a JWT token.
 - **Request Body** (example JSON):
@@ -71,7 +71,7 @@ Make sure you have the following installed:
 
     Example command:
     ```
-    POST http://localhost:3000/login
+    POST http://localhost:3000/api/login
     Content-Type: application/json
 
     {
@@ -81,19 +81,19 @@ Make sure you have the following installed:
     ```
 
 ### 3. **GET Request** - Get the user's profile (requires auth)
-- **Endpoint**: `/my-profile`
+- **Endpoint**: `/api/my-profile`
 - **Method**: `GET`
 - **Description**: This will retrieve the authenticated user's profile.
 - **Authorization**: You need to pass the JWT token obtained from `/login` in the `Authorization` header as a Bearer token.
   
     Example command:
     ```
-    GET http://localhost:3000/my-profile
+    GET http://localhost:3000/api/my-profile
     Authorization: Bearer <your-jwt-token>
     ```
 
 ### 4. **POST Request** - Add a new car to the inventory
-- **Endpoint**: `/add-car`
+- **Endpoint**: `/api/add-car`
 - **Method**: `POST`
 - **Description**: This will add a new car to the inventory.
 - **Request Body** (example JSON):
@@ -110,7 +110,7 @@ Make sure you have the following installed:
 
     Example command:
     ```
-    POST http://localhost:3000/add-car
+    POST http://localhost:3000/api/add-car
     Content-Type: application/json
 
     {
@@ -124,7 +124,7 @@ Make sure you have the following installed:
     ```
 
 ### 5. **GET Request** - Retrieve all rental cars
-- **Endpoint**: `/rental-cars`
+- **Endpoint**: `/api/rental-cars`
 - **Method**: `GET`
 - **Description**: This will retrieve a list of all rental cars available, sorted from lowest to highest price. You can also filter the cars by various attributes like year, color, steering type, and number of seats.
 
@@ -137,22 +137,22 @@ Make sure you have the following installed:
 - **Example**:
     To retrieve cars sorted by price (lowest to highest):
     ```
-    GET http://localhost:3000/rental-cars
+    GET http://localhost:3000/api/rental-cars
     ```
 
     To filter cars by color (e.g., blue):
     ```
-    GET http://localhost:3000/rental-cars?color=blue
+    GET http://localhost:3000/api/rental-cars?color=blue
     ```
 
     To filter cars by year (e.g., 2022):
     ```
-    GET http://localhost:3000/rental-cars?year=2022
+    GET http://localhost:3000/api/rental-cars?year=2022
     ```
 
     To filter cars by steering type (e.g., left) and number of seats (e.g., 5):
     ```
-    GET http://localhost:3000/rental-cars?steering_type=automatic&number_of_seats=5
+    GET http://localhost:3000/api/rental-cars?steering_type=automatic&number_of_seats=5
     ```
 
     The cars will be returned sorted by price in ascending order.
