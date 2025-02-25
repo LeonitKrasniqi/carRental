@@ -10,6 +10,23 @@ Make sure you have the following installed:
 
 1. Clone the repository to your local machine
 
+## Environment Variables
+
+Make sure to set up your environment variables in a `.env` file in the root directory. The required variables are:
+
+- **DB_URI**: The MongoDB connection URI (e.g., `mongodb://localhost:27017`).
+- **DB_NAME**: The name of your database (e.g., `carRental`).
+- **JWT_SECRET**: Secret key used to sign JWT tokens.
+- **PORT**: The port where the application will run (default: `3000`).
+
+Here is an example of the `.env` file:
+
+```dotenv
+DB_URI=mongodb://localhost:27017
+DB_NAME=carRental
+JWT_SECRET=myjwttoken
+PORT=3000
+
 ## Running the Application
 
 ### Navigate to the `src` directory
